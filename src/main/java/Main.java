@@ -7,8 +7,8 @@ import javax.security.auth.login.LoginException;
 
 public class Main {
     public static void main(String[] args) throws LoginException, InterruptedException {
-        JDA bot = JDABuilder.createDefault("MTA2MDMzNjg5MTkyMjIzNTQ1Mg.Gz3QxE.yColCpaGW0LcKjko6ACnzB8WSsjCBBFhwGwFjE")
-                .setActivity(Activity.watching("Egoist Matches"))
+        JDA bot = JDABuilder.createDefault("MTE1MjM0NDk2Mzk2MzY5MTAzOQ.Geo8m_.dJTs3Pru8CY00B162uLLzZTyveXFq3J04OWCTk")
+                .setActivity(Activity.competing("Monitoring Vouches"))
                 .addEventListeners(new CommandHandler())
                 .build().awaitReady();
     }
