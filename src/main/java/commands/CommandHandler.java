@@ -56,6 +56,8 @@ public class CommandHandler extends ListenerAdapter {
             String reason = reasonopt.getAsString();
             if (user.getId().equals(vouched.getId())){
                 event.getHook().sendMessage("You Cannot Vouch Yourself").queue();
+            }else if(reason.length()>10){
+                event.getHook().sendMessage("Vouch Reasons Must Be 10+ Characters, Please Include The Trade Details.").queue();
             }else{
                 try {
                     DataHandler.updateUserData(""+vouched.getId(), 1, 0,0);
