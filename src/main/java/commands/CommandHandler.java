@@ -88,6 +88,8 @@ public class CommandHandler extends ListenerAdapter {
                     DataHandler.updateUserData(""+vouched.getId(), 0, 0,1);
                     DataHandler.updateUserData(""+user.getId(), 0, 0,0);
                     DataHandler.addScamVouchID(event,vouched,user,reason);
+                    Member member = useropt.getAsMember();
+                    event.getGuild().addRoleToMember(member, event.getGuild().getRoleById("1152423241416183878")).queue();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -116,10 +118,10 @@ public class CommandHandler extends ListenerAdapter {
                 }
                 //event.getHook().sendMessage("--CONSTRUCTION--").queue();
                 EmbedBuilder embed = new EmbedBuilder();
-                embed.setTitle(user.getName()+"'s Profile", "");
-                embed.addField("Vouches Received: "+UserInfo[1], "", false);
-                embed.addField("Vouches Given: "+UserInfo[2], "", false);
-                embed.addField("Scam Vouches: "+UserInfo[3], "", false);
+                //embed.setTitle(user.getName()+"'s Profile", "");
+                embed.addField(user.getName()+"'s Profile ("+user.getId()+")\n", "**Vouches Received: **`"+UserInfo[1]+"`\n**Vouches Given: **`"+UserInfo[2]+"`\n**Scam Vouches: **`"+UserInfo[3]+"`", false);
+                //embed.addField("Vouches Given: "+UserInfo[2], "", false);
+                //embed.addField("Scam Vouches: "+UserInfo[3], "", false);
                 embed.setThumbnail(user.getEffectiveAvatarUrl());
                 embed.setFooter("Market Join Date | "+UserInfo[4]);
 
@@ -139,7 +141,7 @@ public class CommandHandler extends ListenerAdapter {
             }
             Integer vouchesRec = Integer.parseInt(data[1]);
             System.out.println(vouchesRec);
-            if(vouchesRec>=300){
+            if(vouchesRec>=400){
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[5])).queue();
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[4])).queue();
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[3])).queue();
@@ -147,20 +149,20 @@ public class CommandHandler extends ListenerAdapter {
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[1])).queue();
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[0])).queue();
                 event.reply("Given Trusted 5 & Below...").queue();
-            } else if(vouchesRec>=150){
+            } else if(vouchesRec>=250){
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[4])).queue();
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[3])).queue();
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[2])).queue();
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[1])).queue();
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[0])).queue();
                 event.reply("Given Trusted 4 & Below...").queue();
-            } else if(vouchesRec>=75){
+            } else if(vouchesRec>=150){
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[3])).queue();
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[2])).queue();
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[1])).queue();
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[0])).queue();
                 event.reply("Given Trusted 3 & Below...").queue();
-            } else if(vouchesRec>=50){
+            } else if(vouchesRec>=75){
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[2])).queue();
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[1])).queue();
                 event.reply("Given Trusted 2 & Below...").queue();
@@ -171,8 +173,9 @@ public class CommandHandler extends ListenerAdapter {
             } else if(vouchesRec>=5){
                 event.getGuild().addRoleToMember(member, event.getGuild().getRoleById(RoleIds[0])).queue();
                 event.reply("Given Seller").queue();
+            } else {
+                event.reply("Not eligible for any roles").queue();
             }
-            event.reply("No New Roles").queue();
         }  // add more else if
 
     }
