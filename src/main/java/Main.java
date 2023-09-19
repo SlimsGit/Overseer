@@ -1,6 +1,7 @@
 import commands.CommandHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -12,7 +13,8 @@ public class Main {
     public static void main(String[] args) throws LoginException, InterruptedException {
         JDA bot = JDABuilder.createDefault("MTE1MjM0NDk2Mzk2MzY5MTAzOQ.Geo8m_.dJTs3Pru8CY00B162uLLzZTyveXFq3J04OWCTk")
                 .addEventListeners(new CommandHandler())
-                .setActivity(Activity.listening("to you"))
+                .setStatus(OnlineStatus.DO_NOT_DISTURB)
+                .setActivity(Activity.listening("to #vouches"))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .build().awaitReady();
 

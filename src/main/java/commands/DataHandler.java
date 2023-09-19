@@ -1,6 +1,8 @@
 package commands;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.UserSnowflake;
@@ -13,6 +15,7 @@ import java.nio.charset.*;
 import java.nio.file.*;
 import java.time.LocalDate; // import the LocalDate class
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -37,7 +40,7 @@ public class DataHandler {
     public static void addVouchID(Event event, User vouched, User vouchee, String reason) throws IOException {
         String path = (System.getProperty("user.dir")+"\\src\\main\\java\\commands\\Data\\Vouches");
         String ID = String.valueOf(getLineCount(Path.of(path)));
-        String dataToAdd = ID+"-"+vouched.getId()+"-"+vouchee.getId()+"-"+reason+"-"+LocalDate.now();
+        String dataToAdd = ID+","+vouched.getId()+","+vouchee.getId()+","+reason+","+LocalDate.now();
         replaceFileContent(path,"-", "-\n"+dataToAdd);
 
         TextChannel vouchlogs = event.getJDA().getTextChannelById("1152427520419971264");
@@ -57,12 +60,12 @@ public class DataHandler {
     public static void addScamVouchID(Event event, User vouched, User vouchee, String reason) throws IOException {
         String path = (System.getProperty("user.dir")+"\\src\\main\\java\\commands\\Data\\ScamVouches");
         String ID = String.valueOf(getLineCount(Path.of(path)));
-        String dataToAdd = ID+"-"+vouched.getId()+"-"+vouchee.getId()+"-"+reason+"-"+LocalDate.now();
+        String dataToAdd = ID+","+vouched.getId()+","+vouchee.getId()+","+reason+","+LocalDate.now();
         replaceFileContent(path,"-", "-\n"+dataToAdd);
 
         TextChannel vouchlogs = event.getJDA().getTextChannelById("1152427520419971264");
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("VOUCH ID#"+ID, "");
+        embed.setTitle("SCAM-VOUCH ID#"+ID, "");
         embed.addField("Scam Vouched: "+vouched.getName()+" ("+vouched.getId()+")", "", false);
         embed.addField("Vouchee: "+vouchee.getName()+" ("+vouchee.getId()+")", "", false);
         embed.addField("Reason: "+reason, "", false);
@@ -103,6 +106,21 @@ public class DataHandler {
         String[] userinfo = userline.split(",");
         return userinfo;
     }
+
+    public static String[][] getVouchedData(String userid) throws IOException {
+        String[] userline = getVouchesFromFile(userid);
+        if (userline == null) {
+            String[][] userinfo = new String[1][1];
+            userinfo[0][0] = "No Vouches";
+            return userinfo;
+        } else {
+            String[][] userinfo = new String[userline.length][];
+            for (int i = 0; i < userline.length; i++) {
+                userinfo[i] = userline[i].split(",");
+            }
+            return userinfo;
+        }
+    }
     public static void updateUserData(String user, Integer received, Integer given, Integer scam) throws IOException {
         //0 - UserID, 1 - Vouches Received, Vouches Given, Rating, Date Joined
         Path path = Paths.get("C:\\Users\\issaa\\IdeaProjects\\Overseer\\src\\main\\java\\commands\\Data\\UserData");
@@ -141,6 +159,35 @@ public class DataHandler {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String[] getVouchesFromFile(String string){
+        String path = System.getProperty("user.dir") + "\\src\\main\\java\\commands\\Data\\Vouches";
+        ArrayList<String> linesContainingString = new ArrayList<>();
+
+        try {
+            File myObj = new File(path);
+            Scanner myReader = new Scanner(myObj);
+            Integer counter = 0;
+            while (myReader.hasNextLine()) {
+                String currentLine = myReader.nextLine();
+                if (currentLine.contains(string)) {
+                    counter+=1;
+                    linesContainingString.add(currentLine);
+                    if (counter == 10){
+                        return linesContainingString.toArray(new String[0]);
+                    }
+                }
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        // Convert the list to an array
+        String[] resultArray = linesContainingString.toArray(new String[0]);
+        return resultArray;
     }
     public static Boolean findFromFile(String string){
         String path = (System.getProperty("user.dir")+"\\src\\main\\java\\commands\\Data\\UserData");
